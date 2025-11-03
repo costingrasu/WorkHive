@@ -1,0 +1,11 @@
+spring.application.name=api
+
+# =========== PostgreSQL Database Connection ===========
+spring.datasource.url=jdbc:postgresql://localhost:5432/work_hive_db
+spring.datasource.username=work_hive_admin
+spring.datasource.password= # PUNE AICI PAROLA TA DE POSTGRESQL
+
+# =========== JPA & Hibernate Settings ===========
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
