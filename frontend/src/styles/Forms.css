@@ -2,7 +2,6 @@
 
 body {
   margin: 0;
-  padding: 2rem;
   
   background-color: #fdf8e1; 
   background-image: 
@@ -152,4 +151,62 @@ body {
 .form-success {
   color: #38761d; 
   border-color: #38761d;
+}
+
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin: 4rem auto; 
+  padding: 2rem;
+  
+  background-color: #f7e6c4; 
+  border: 3px solid #7a6e5a; 
+  border-radius: 12px; 
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.3); 
+  transform: rotate(-0.5deg); 
+
+  text-align: center;
+}
+
+.dashboard-container h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #5a4b3d; 
+  text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.6); 
+}
+
+.dashboard-container p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #5a4b3d;
+  margin-bottom: 2rem;
+}
+
+.logout-button {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.25rem;
+  padding: 1rem;
+  color: #fff; 
+  border: 2px solid #5a4b3d; 
+  border-radius: 8px; 
+  cursor: pointer;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.3); 
+  transition: all 0.1s ease-out;
+
+  background-color: #d9534f;
+  border-color: #b52b27;
+}
+
+.logout-button:hover {
+  background-color: #c9302c;
+  transform: translateY(-3px) rotate(0.5deg); 
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.4);
+}
+
+.logout-button:active {
+  transform: translateY(1px) rotate(0deg);
+  box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
 }

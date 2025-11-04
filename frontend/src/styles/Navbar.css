@@ -1,0 +1,67 @@
+.navbar {
+  font-family: 'Fredoka One', cursive; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2.5rem;
+  
+  background-color: #f7e6c4;
+  border: 3px solid #7a6e5a;
+  box-shadow: 0px 6px 0px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-logo {
+  font-size: 1.8rem;
+  color: #5a4b3d;
+  text-decoration: none;
+  text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.6);
+  transition: transform 0.2s ease;
+}
+
+.navbar-logo:hover {
+  transform: rotate(-2deg);
+}
+
+.navbar-links ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-link {
+  font-size: 1.1rem;
+  color: #7a6e5a;
+  text-decoration: none;
+  padding-bottom: 5px;
+  transition: all 0.2s ease-out;
+}
+
+.nav-link:hover {
+  color: #5a4b3d;
+  border-bottom: 3px solid #5a4b3d;
+}
+
+.register-btn {
+  padding: 0.6rem 1rem;
+  background-color: #7a6e5a;
+  color: #fff;
+  border: 2px solid #5a4b3d;
+  border-radius: 8px;
+  box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.2);
+  transition: all 0.1s ease-out;
+}
+
+.register-btn:hover {
+  color: #fff;
+  border-bottom: 2px solid #5a4b3d;
+  transform: translateY(-2px);
+  box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.3);
+}
+
+.register-btn:active {
+  transform: translateY(1px);
+  box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
+}
