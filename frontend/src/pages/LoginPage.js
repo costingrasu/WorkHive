@@ -1,7 +1,81 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
+import '../styles/Forms.css';
 
 const LoginPage = () => {
-  return <div>Pagina de Login</div>;
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
+  const [error, setError] = useState(null);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(error);
+
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/api/auth/login',
+        formData
+      );
+
+      console.log(response.data);
+
+      navigate('/');
+    } catch (err) {
+      console.error(err);
+
+      setError('Incorrect email or password.');
+    }
+  }
+
+  return (
+    <form className="form-container" onSubmit={handleSubmit}>
+      <h2>Login</h2>
+
+      {error && <div className="form-error">{error}</div>}
+
+      <div className="input-wrapper">
+        <input
+          type='email'
+          name='email'
+          placeholder="Email"
+          className="form-input"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
+      <div className="input-wrapper">
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          className="form-input"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
+      <button type="submit" className="form-button">
+        Login
+      </button>
+    </form>
+  )
 };
 
 export default LoginPage;
