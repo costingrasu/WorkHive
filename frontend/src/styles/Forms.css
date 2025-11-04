@@ -97,6 +97,7 @@ body {
   background-color: #ffffff; 
   outline: none;
   -webkit-appearance: none;
+  appearance: none;
   transition: all 0.1s ease-out;
   width: 100%; 
   box-sizing: border-box; 
