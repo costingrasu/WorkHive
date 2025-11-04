@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
-import '../styles/Forms.css';
+import "../styles/Forms.css";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   const [error, setError] = useState(null);
@@ -27,19 +29,21 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:8080/api/auth/login',
+        "http://localhost:8080/api/auth/login",
         formData
       );
 
       console.log(response.data);
 
-      navigate('/');
+      login();
+
+      navigate("/");
     } catch (err) {
       console.error(err);
 
-      setError('Incorrect email or password.');
+      setError("Incorrect email or password.");
     }
-  }
+  };
 
   return (
     <form className="form-container" onSubmit={handleSubmit}>
@@ -49,8 +53,8 @@ const LoginPage = () => {
 
       <div className="input-wrapper">
         <input
-          type='email'
-          name='email'
+          type="email"
+          name="email"
           placeholder="Email"
           className="form-input"
           value={formData.email}
@@ -75,7 +79,7 @@ const LoginPage = () => {
         Login
       </button>
     </form>
-  )
+  );
 };
 
 export default LoginPage;

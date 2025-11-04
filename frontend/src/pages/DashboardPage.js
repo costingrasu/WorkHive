@@ -1,14 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-
-import '../styles/Forms.css';
+import { useAuth } from "../context/AuthContext";
+import "../styles/Forms.css";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
+
   const handleLogout = () => {
-    navigate('/login');
+    logout();
+    navigate("/login");
   };
-  
+
   return (
     <div className="dashboard-container">
       <h2>Reserve the place you need to bee!</h2>
@@ -22,7 +25,7 @@ const DashboardPage = () => {
         Logout
       </button>
     </div>
-  )
+  );
 };
 
 export default DashboardPage;

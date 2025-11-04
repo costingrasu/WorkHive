@@ -65,3 +65,20 @@
   transform: translateY(1px);
   box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
 }
+
+.logout-btn {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  color: #7a6e5a;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding-bottom: 5px;
+  transition: all 0.2s ease-out;
+}
+
+.logout-btn:hover {
+  color: #d9534f;
+  border-bottom: 3px solid #d9534f;
+}
