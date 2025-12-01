@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
     public AuthResponse register(RegisterRequest request) {
@@ -36,8 +37,10 @@ public class AuthService {
 
         userRepository.save(user);
 
+        var jwtToken = jwtService.generateToken(user);
+
         return AuthResponse.builder()
-                .message("User registered successfully")
+                .token(jwtToken)
                 .build();
     }
 
@@ -51,8 +54,10 @@ public class AuthService {
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found after successful login"));
 
+        var jwtToken = jwtService.generateToken(user);
+
         return AuthResponse.builder()
-                .message("User logged in successfully")
+                .token(jwtToken)
                 .build();
     }
 }
