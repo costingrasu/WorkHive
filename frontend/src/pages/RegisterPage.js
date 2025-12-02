@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 import "../styles/Forms.css";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -30,19 +32,18 @@ const RegisterPage = () => {
     setSuccess(null);
 
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/auth/register",
-        formData
-      );
+      const response = await axios.post("/api/auth/register", formData);
 
       console.log(response.data);
 
-      setSuccess("Success! Redirecting to the login page.");
-      setFormData({ firstName: "", lastName: "", email: "", password: "" });
+      if (response.data.token) {
+        login(response.data.token);
+        setSuccess("Account created! Redirecting to Dashboard...");
 
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
+        setTimeout(() => {
+          navigate("/");
+        }, 1500);
+      }
     } catch (err) {
       console.log(err);
       if (err.response && err.response.data) {

@@ -25,22 +25,21 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(error);
+    setError(null);
 
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/auth/login",
-        formData
-      );
+      const response = await axios.post("/api/auth/login", formData);
 
       console.log(response.data);
 
-      login();
-
-      navigate("/");
+      if (response.data.token) {
+        login(response.data.token);
+        navigate("/");
+      } else {
+        setError("Invalid response.");
+      }
     } catch (err) {
       console.error(err);
-
       setError("Incorrect email or password.");
     }
   };

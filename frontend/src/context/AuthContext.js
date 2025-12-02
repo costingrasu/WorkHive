@@ -3,19 +3,22 @@ import React, { createContext, useContext, useState } from "react";
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  // PE VIITOR: Aici vom stoca token-ul JWT si user data
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem("token"));
 
-  const login = () => {
-    setIsLoggedIn(true);
+  const isLoggedIn = !!token;
+
+  const login = (newToken) => {
+    localStorage.setItem("token", newToken);
+    setToken(newToken);
   };
 
   const logout = () => {
-    // PE VIITOR: localStorage.removeItem('token')
-    setIsLoggedIn(false);
+    localStorage.removeItem("token");
+    setToken(null);
   };
 
   const value = {
+    token,
     isLoggedIn,
     login,
     logout,
