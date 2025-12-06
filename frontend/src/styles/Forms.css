@@ -211,3 +211,111 @@ body {
   transform: translateY(1px) rotate(0deg);
   box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
 }
+
+.reservations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.reservation-card {
+  background-color: #fff;
+  border: 2px solid #5a4b3d;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease;
+  text-align: left;
+  position: relative; 
+}
+
+.reservation-card::before {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 50px;
+  background-image: url('./assets/hand.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  
+  position: absolute;
+  left: -60px;
+  top: 50%;
+  
+  opacity: 0;
+  transition: all 0.2s ease-out;
+  transform: translateX(-20px) translateY(-50%) rotate(0deg);
+  pointer-events: none;
+}
+
+.reservation-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.2);
+}
+
+.reservation-card:hover::before {
+  opacity: 1;
+  transform: translateX(0) translateY(-50%) rotate(10deg); 
+  left: -45px; 
+}
+
+.reservation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  border-bottom: 2px dashed #ddd;
+  padding-bottom: 0.5rem;
+}
+
+.res-location {
+  font-size: 1.2rem;
+  color: #5a4b3d;
+}
+
+.res-status {
+  font-size: 0.9rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  border: 2px solid;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.status-confirmed {
+  background-color: #d4edda;
+  color: #155724;
+  border-color: #155724;
+}
+
+.status-cancelled {
+  background-color: #f8d7da;
+  color: #721c24;
+  border-color: #721c24;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+  border-color: #856404;
+}
+
+.res-details {
+  font-family: sans-serif;
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+.res-details strong {
+  color: #5a4b3d;
+  font-family: 'Fredoka One', cursive;
+}
+
+.no-reservations {
+  color: #7a6e5a;
+  font-style: italic;
+  margin-top: 1rem;
+}
