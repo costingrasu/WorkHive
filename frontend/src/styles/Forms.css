@@ -319,3 +319,238 @@ body {
   font-style: italic;
   margin-top: 1rem;
 }
+
+.reservation-wizard {
+  max-width: 800px;
+}
+
+.steps-indicator {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1rem;
+  padding-left: 20px;
+  padding-right: 20px;
+  
+  border-bottom: 2px dashed #5a4b3d; 
+}
+
+.step {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem;
+  position: relative;
+  transition: all 0.3s ease;
+  
+  color: #5a4b3d !important; 
+}
+
+.step.active::before {
+  content: '';
+  position: absolute;
+  left: -50px;
+  top: 50%;
+  width: 40px; 
+  height: 40px;
+  background-image: url('./assets/hand.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  animation: floatHandLeft 2s infinite ease-in-out;
+}
+
+.step.active {
+  color: #5a4b3d;
+}
+
+@keyframes floatHandLeft {
+  0% { transform: translateY(-50%) translateX(0); }
+  50% { transform: translateY(-50%) translateX(-10px); }
+  100% { transform: translateY(-50%) translateX(0); }
+}
+
+.step.active::before {
+  content: '';
+  position: absolute;
+  left: -50px;
+  top: 50%;
+  
+  width: 40px; 
+  height: 40px;
+  
+  background-image: url('./assets/hand.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  
+  animation: floatHandLeft 2s infinite ease-in-out;
+}
+
+.wizard-form .form-group {
+  margin-bottom: 2rem;
+}
+
+.wizard-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #5a4b3d;
+  text-align: left;
+}
+
+.spaces-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.space-card {
+  background: white;
+  border: 2px solid #5a4b3d;
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  position: relative;
+}
+
+.space-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
+}
+
+.space-name {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.3rem;
+  color: #5a4b3d;
+  margin-bottom: 0.5rem;
+}
+
+.form-button.secondary {
+  background-color: #d9534f;
+  border-color: #b52b27;
+}
+
+.form-button.secondary:hover {
+  background-color: #c9302c;
+}
+
+.step-title {
+  font-size: 2rem;
+  color: #5a4b3d;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.parking-option {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #fff;
+  border: 2px solid #5a4b3d;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-align: left;
+}
+
+.parking-option input {
+  width: 25px;
+  height: 25px;
+  accent-color: #5a4b3d;
+}
+
+.confirmation-details {
+  background: #fff;
+  border: 2px dashed #5a4b3d;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: left;
+  margin-bottom: 1.5rem;
+}
+
+.confirmation-details p {
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+  color: #555;
+}
+
+.confirmation-details strong {
+  color: #5a4b3d;
+}
+
+.notes-container {
+  text-align: left;
+  margin-top: 1rem;
+}
+.notes-container label {
+  display: block;
+  font-weight: bold;
+  color: #5a4b3d;
+  margin-bottom: 0.5rem;
+}
+.notes-container textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 2px solid #7a6e5a;
+  border-radius: 8px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.radio-group-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.resource-tags-container {
+  margin-top: 0.5rem;
+}
+
+.resource-tag {
+  background: #eee;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  margin-right: 5px;
+  display: inline-block;
+}
+
+.parking-label-content {
+  margin: 0;
+  cursor: pointer;
+}
+
+.parking-hint {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: normal;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn-flex-1 {
+  flex: 1;
+}
+
+.btn-flex-2 {
+  flex: 2;
+}
+
+.wizard-form .input-wrapper::before {
+  display: none;
+  content: none;
+}

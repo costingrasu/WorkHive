@@ -82,3 +82,15 @@
   color: #d9534f;
   border-bottom: 3px solid #d9534f;
 }
+
+.new-reservation-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  
+
+  color: #fff;
+  text-shadow: none;
+  font-weight: normal;
+}

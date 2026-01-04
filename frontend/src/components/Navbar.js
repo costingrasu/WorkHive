@@ -24,6 +24,14 @@ const Navbar = () => {
           {isLoggedIn ? (
             <>
               <li>
+                <Link
+                  to="/reserve"
+                  className="register-btn new-reservation-btn"
+                >
+                  <span>+</span> New Reservation
+                </Link>
+              </li>
+              <li>
                 <Link to="/" className="nav-link">
                   Dashboard
                 </Link>
