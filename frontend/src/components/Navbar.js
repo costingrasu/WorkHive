@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import "../styles/Navbar.css";
 
 const Navbar = () => {
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -23,6 +23,18 @@ const Navbar = () => {
         <ul>
           {isLoggedIn ? (
             <>
+              {isAdmin && (
+                <li>
+                  <Link
+                    to="/admin"
+                    className="nav-link"
+                    style={{ color: "#d9534f", fontWeight: "bold" }}
+                  >
+                    Admin Panel
+                  </Link>
+                </li>
+              )}
+
               <li>
                 <Link
                   to="/reserve"

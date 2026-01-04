@@ -6,8 +6,14 @@ import DashboardPage from "./pages/DashboardPage";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import MakeReservationPage from "./pages/MakeReservationPage";
+import AdminPage from "./pages/AdminPage";
+import { useAuth } from "./context/AuthContext";
 
 function App() {
+  const { loading } = useAuth();
+
+  if (loading) return <div>Loading Application...</div>;
+
   return (
     <div className="App">
       <Navbar />
@@ -29,6 +35,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <MakeReservationPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute requiredRole="ADMIN">
+                <AdminPage />
               </ProtectedRoute>
             }
           />

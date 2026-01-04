@@ -1,0 +1,107 @@
+.admin-container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f7e6c4;
+  border: 3px solid #7a6e5a;
+  border-radius: 12px;
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.3);
+}
+
+.admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 2rem;
+  border-bottom: 2px dashed #7a6e5a;
+  padding-bottom: 1rem;
+}
+
+.tab-button {
+  background: #fff;
+  border: 2px solid #7a6e5a;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-family: 'Fredoka One', cursive;
+  color: #7a6e5a;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-button:hover {
+  background: #fffaf0;
+  transform: translateY(-2px);
+}
+
+.tab-button.active {
+  background: #7a6e5a;
+  color: #fff;
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+}
+
+.data-table th, .data-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.data-table th {
+  background-color: #5a4b3d;
+  color: #fff;
+  font-family: 'Fredoka One', cursive;
+}
+
+.data-table tr:hover {
+  background-color: #fff8e1;
+}
+
+.admin-form {
+  background: #fff;
+  padding: 1.5rem;
+  border: 2px dashed #7a6e5a;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.admin-form h3 {
+  margin-top: 0;
+  color: #5a4b3d;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.form-row .form-input, .form-row select, .form-row textarea {
+    flex: 1;
+    min-width: 200px;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    border: 2px solid #7a6e5a;
+    border-radius: 6px;
+    font-family: inherit;
+    width: 100%;
+}
+
+.delete-btn {
+  background: #d9534f;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.delete-btn:hover { background: #c9302c; }

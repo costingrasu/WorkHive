@@ -44,21 +44,34 @@ public class AdminService {
         return reservationRepository.findAllReservationsAdmin();
     }
 
-    public List<String> getSpacesReport() {
+    public List<AdminSpaceDTO> getSpacesReport() {
         return spaceRepository.findAllSpacesWithLocationName().stream()
-                .map(row -> "Spațiu: " + row[1] + " (" + row[2] + ") - Clădire: " + row[3])
+                .map(row -> new AdminSpaceDTO(
+                        (Integer) row[0],
+                        (String) row[1],
+                        (String) row[2],
+                        (String) row[3]
+                ))
                 .collect(Collectors.toList());
     }
 
-    public List<String> getParkingsReport() {
+    public List<AdminParkingDTO> getParkingsReport() {
         return parkingRepository.findAllParkingsWithLocationName().stream()
-                .map(row -> "Loc Parcare: " + row[1] + " - Clădire: " + row[2])
+                .map(row -> new AdminParkingDTO(
+                        (Integer) row[0],
+                        (Integer) row[1],
+                        (String) row[2]
+                ))
                 .collect(Collectors.toList());
     }
 
-    public List<String> getResourcesReport() {
+    public List<AdminResourceDTO> getResourcesReport() {
         return resourceRepository.findAllResourcesDistribution().stream()
-                .map(row -> "Dotare: " + row[0] + " -> Se află în: " + row[1])
+                .map(row -> new AdminResourceDTO(
+                        (Integer) row[0],
+                        (String) row[1],
+                        (String) row[2]
+                ))
                 .collect(Collectors.toList());
     }
 

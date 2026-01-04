@@ -34,17 +34,17 @@ public class AdminController {
     }
 
     @GetMapping("/spaces-report")
-    public ResponseEntity<List<String>> getSpacesReport() {
+    public ResponseEntity<List<AdminSpaceDTO>> getSpacesReport() {
         return ResponseEntity.ok(adminService.getSpacesReport());
     }
 
     @GetMapping("/parkings-report")
-    public ResponseEntity<List<String>> getParkingsReport() {
+    public ResponseEntity<List<AdminParkingDTO>> getParkingsReport() {
         return ResponseEntity.ok(adminService.getParkingsReport());
     }
 
     @GetMapping("/resources-report")
-    public ResponseEntity<List<String>> getResourcesReport() {
+    public ResponseEntity<List<AdminResourceDTO>> getResourcesReport() {
         return ResponseEntity.ok(adminService.getResourcesReport());
     }
 

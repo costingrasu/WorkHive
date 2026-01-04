@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ResourceRepository extends JpaRepository<Resource, Integer> {
     @Query(value = """
-        SELECT r.name as resourceName, s.name as spaceName
+        SELECT r.id, r.name as resourceName, s.name as spaceName
         FROM resources r
         JOIN space_resources sr ON r.id = sr.resource_id
         JOIN spaces s ON sr.space_id = s.id
