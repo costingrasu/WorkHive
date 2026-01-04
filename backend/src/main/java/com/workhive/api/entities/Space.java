@@ -11,11 +11,6 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-enum SpaceType {
-    WORKSPACE,
-    MEETING_ROOM
-}
-
 @Data
 @Builder
 @NoArgsConstructor
