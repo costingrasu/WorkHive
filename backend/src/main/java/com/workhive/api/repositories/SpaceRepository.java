@@ -29,4 +29,12 @@ public interface SpaceRepository extends JpaRepository<Space, Integer> {
             @Param("startTime") LocalDateTime startTime,
             @Param("endTime") LocalDateTime endTime
     );
+
+    @Query(value = """
+        SELECT s.id, s.name, s.type, l.name as locationName 
+        FROM spaces s
+        JOIN locations l ON s.location_id = l.id
+        ORDER BY l.name, s.name
+        """, nativeQuery = true)
+    List<Object[]> findAllSpacesWithLocationName();
 }

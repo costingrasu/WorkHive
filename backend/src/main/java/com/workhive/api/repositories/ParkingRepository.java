@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface ParkingRepository extends JpaRepository<Parking, Integer> {
@@ -28,4 +29,12 @@ public interface ParkingRepository extends JpaRepository<Parking, Integer> {
             @Param("startTime") LocalDateTime startTime,
             @Param("endTime") LocalDateTime endTime
     );
+
+    @Query(value = """
+        SELECT p.id, p.spot_number, l.name as locationName
+        FROM parkings p
+        JOIN locations l ON p.location_id = l.id
+        ORDER BY l.name, p.spot_number
+        """, nativeQuery = true)
+    List<Object[]> findAllParkingsWithLocationName();
 }

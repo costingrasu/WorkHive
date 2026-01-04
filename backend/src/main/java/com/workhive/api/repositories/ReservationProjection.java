@@ -11,4 +11,5 @@ public interface ReservationProjection {
     LocalDateTime getEndTime();
     String getStatus();
     String getNotes();
+    String getUserEmail();
 }

@@ -21,4 +21,19 @@ public interface LocationRepository extends JpaRepository<Location, Integer> {
         ORDER BY l.name ASC
         """, nativeQuery = true)
     List<Object[]> findAllLocationsWithCountNative();
+
+    @Query(value = """
+        SELECT 
+            l.id, 
+            l.name, 
+            (
+                SELECT COUNT(*) 
+                FROM reservations r 
+                JOIN spaces s ON r.space_id = s.id 
+                WHERE s.location_id = l.id
+            ) as reservation_count
+        FROM locations l
+        ORDER BY reservation_count DESC
+        """, nativeQuery = true)
+    List<Object[]> findLocationsByPopularity();
 }
