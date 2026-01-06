@@ -105,3 +105,42 @@
   font-weight: bold;
 }
 .delete-btn:hover { background: #c9302c; }
+
+.inactive-users-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.inactive-user-item {
+  background-color: #fff;
+  border: 2px dashed #cbbfa9;
+  border-radius: 8px;
+  padding: 0.8rem 1.2rem;
+  margin-bottom: 0.8rem;
+  
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  
+  font-size: 1.1rem;
+  color: #5a4b3d;
+  transition: transform 0.2s ease;
+}
+
+.inactive-user-item:hover {
+  transform: translateX(5px);
+  background-color: #fffcf5;
+  border-color: #5a4b3d;
+}
+
+.pillow-icon {
+  font-size: 1.5rem;
+}
+
+.user-email-muted {
+  color: #888;
+  font-size: 0.95rem;
+  font-family: sans-serif;
+  margin-left: 5px;
+}

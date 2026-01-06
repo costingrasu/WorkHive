@@ -236,13 +236,26 @@ const AdminPage = () => {
           </table>
 
           <h3 style={{ marginTop: "2rem" }}>😴 Inactive Users</h3>
-          <ul style={{ textAlign: "left" }}>
-            {stats.inactiveUsers.map((u) => (
-              <li key={u.id}>
-                {u.firstName} {u.lastName} ({u.email})
-              </li>
-            ))}
-          </ul>
+
+          {stats.inactiveUsers.length === 0 ? (
+            <p style={{ fontStyle: "italic", color: "#666" }}>
+              Everyone is active! No sleepy users.
+            </p>
+          ) : (
+            <ul className="inactive-users-list">
+              {stats.inactiveUsers.map((u) => (
+                <li key={u.id} className="inactive-user-item">
+                  <span className="pillow-icon">💤</span>
+                  <div>
+                    <strong>
+                      {u.firstName} {u.lastName}
+                    </strong>
+                    <span className="user-email-muted">({u.email})</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
 
           <h3 style={{ marginTop: "2rem" }}>📅 All Reservations</h3>
           <div style={{ maxHeight: "300px", overflowY: "scroll" }}>
