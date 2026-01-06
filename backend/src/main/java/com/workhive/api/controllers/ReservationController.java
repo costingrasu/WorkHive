@@ -33,4 +33,14 @@ public class ReservationController {
 
         return ResponseEntity.ok(reservationService.createReservation(email, request));
     }
+
+    @PutMapping("/{id}/cancel")
+    public ResponseEntity<String> cancelReservation(@PathVariable Integer id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        
+        reservationService.cancelReservation(email, id);
+
+        return ResponseEntity.ok("Reservation cancelled successfully.");
+    }
 }

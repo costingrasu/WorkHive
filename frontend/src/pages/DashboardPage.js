@@ -11,6 +11,7 @@ const DashboardPage = () => {
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     const fetchReservations = async () => {
@@ -18,7 +19,7 @@ const DashboardPage = () => {
         const response = await axios.get("/api/reservations/my-reservations");
         setReservations(response.data);
       } catch (err) {
-        console.error("Loading rezervations error:", err);
+        console.error("Loading reservations error:", err);
         setError("Couldn't load reservations. Try again.");
       } finally {
         setLoading(false);
@@ -26,11 +27,24 @@ const DashboardPage = () => {
     };
 
     fetchReservations();
-  }, []);
+  }, [refreshTrigger]);
 
   const handleLogout = () => {
     logout();
     navigate("/login");
+  };
+
+  const handleCancel = async (id) => {
+    if (!window.confirm("Are you sure you want to cancel this reservation?"))
+      return;
+
+    try {
+      await axios.put(`/api/reservations/${id}/cancel`);
+      setRefreshTrigger((prev) => prev + 1);
+    } catch (err) {
+      alert("Could not cancel reservation.");
+      console.error(err);
+    }
   };
 
   const formatDate = (dateString) => {
@@ -62,7 +76,9 @@ const DashboardPage = () => {
                   <div className="reservation-header">
                     <span className="res-location">{res.locationName}</span>
                     <span
-                      className={`res-status status-${res.status.toLowerCase()}`}
+                      className={`res-status status-${
+                        res.status ? res.status.toLowerCase() : "confirmed"
+                      }`}
                     >
                       {res.status}
                     </span>
@@ -85,6 +101,15 @@ const DashboardPage = () => {
                       </p>
                     )}
                   </div>
+
+                  {res.status !== "CANCELLED" && (
+                    <button
+                      className="cancel-res-btn"
+                      onClick={() => handleCancel(res.id)}
+                    >
+                      Cancel Reservation
+                    </button>
+                  )}
                 </div>
               ))}
             </div>

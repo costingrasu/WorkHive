@@ -554,3 +554,22 @@ body {
   display: none;
   content: none;
 }
+
+.cancel-res-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #fff;
+  color: #d9534f;
+  border: 2px solid #d9534f;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.cancel-res-btn:hover {
+  background-color: #d9534f;
+  color: white;
+}

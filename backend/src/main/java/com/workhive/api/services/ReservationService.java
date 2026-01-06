@@ -82,4 +82,17 @@ public class ReservationService {
                 .notes(saved.getNotes())
                 .build();
     }
+
+    public void cancelReservation(String userEmail, Integer reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new NoSuchElementException("Reservation not found"));
+
+        if (!reservation.getUser().getEmail().equals(userEmail)) {
+            throw new IllegalStateException("Unauthorized: You can only cancel your own reservations.");
+        }
+
+        reservation.setStatus(ReservationStatus.CANCELLED);
+
+        reservationRepository.save(reservation);
+    }
 }
