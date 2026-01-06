@@ -112,4 +112,28 @@ public class AdminController {
         adminService.deleteReservation(id);
         return ResponseEntity.ok("Reservation deleted");
     }
+
+    @PutMapping("/locations/{id}")
+    public ResponseEntity<String> updateLocation(@PathVariable Integer id, @RequestBody LocationCreateDTO dto) {
+        adminService.updateLocation(id, dto);
+        return ResponseEntity.ok("Location updated");
+    }
+
+    @PutMapping("/resources/{id}")
+    public ResponseEntity<String> updateResource(@PathVariable Integer id, @RequestBody ResourceCreateDTO dto) {
+        adminService.updateResource(id, dto);
+        return ResponseEntity.ok("Resource updated");
+    }
+
+    @PutMapping("/parkings/{id}")
+    public ResponseEntity<String> updateParking(@PathVariable Integer id, @RequestBody ParkingCreateDTO dto) {
+        adminService.updateParking(id, dto);
+        return ResponseEntity.ok("Parking updated");
+    }
+
+    @PutMapping("/spaces/{id}")
+    public ResponseEntity<String> updateSpace(@PathVariable Integer id, @RequestBody SpaceCreateDTO dto) {
+        adminService.updateSpace(id, dto);
+        return ResponseEntity.ok("Space updated");
+    }
 }

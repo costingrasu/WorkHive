@@ -7,6 +7,8 @@ const AdminPage = () => {
   const [loading, setLoading] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
+  const [editId, setEditId] = useState(null);
+
   const [stats, setStats] = useState({
     inactiveUsers: [],
     topLocations: [],
@@ -33,6 +35,20 @@ const AdminPage = () => {
     description: "",
     resourceIdsStr: "",
   });
+
+  const resetForms = () => {
+    setEditId(null);
+    setNewLoc({ name: "", city: "", address: "", floor: "" });
+    setNewRes({ name: "", description: "" });
+    setNewPark({ locationId: "", spotNumber: "" });
+    setNewSpace({
+      name: "",
+      locationId: "",
+      type: "WORKSPACE",
+      description: "",
+      resourceIdsStr: "",
+    });
+  };
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -77,6 +93,7 @@ const AdminPage = () => {
 
   useEffect(() => {
     fetchData();
+    resetForms();
   }, [fetchData, refreshTrigger]);
 
   const handleDelete = async (endpoint, id) => {
@@ -89,42 +106,89 @@ const AdminPage = () => {
     }
   };
 
-  const createLocation = async (e) => {
-    e.preventDefault();
-    await axios.post("/api/admin/locations", newLoc);
-    setNewLoc({ name: "", city: "", address: "", floor: "" });
-    setRefreshTrigger((prev) => prev + 1);
+  const handleEditLocation = (loc) => {
+    setEditId(loc.id);
+    setNewLoc({
+      name: loc.name,
+      city: loc.city,
+      address: loc.address || "",
+      floor: loc.floor || "",
+    });
+    window.scrollTo(0, 0);
   };
 
-  const createResource = async (e) => {
-    e.preventDefault();
-    await axios.post("/api/admin/resources", newRes);
-    setNewRes({ name: "", description: "" });
-    setRefreshTrigger((prev) => prev + 1);
+  const handleEditResource = (res) => {
+    setEditId(res.id);
+    setNewRes({ name: res.name, description: "" });
+    window.scrollTo(0, 0);
   };
 
-  const createParking = async (e) => {
-    e.preventDefault();
-    await axios.post("/api/admin/parkings", newPark);
-    setNewPark({ locationId: "", spotNumber: "" });
-    setRefreshTrigger((prev) => prev + 1);
+  const handleEditParking = (park) => {
+    setEditId(park.id);
+    setNewPark({ locationId: "", spotNumber: park.spotNumber });
+    window.scrollTo(0, 0);
   };
 
-  const createSpace = async (e) => {
+  const submitLocation = async (e) => {
+    e.preventDefault();
+    if (editId) {
+      await axios.put(`/api/admin/locations/${editId}`, newLoc);
+    } else {
+      await axios.post("/api/admin/locations", newLoc);
+    }
+    setRefreshTrigger((prev) => prev + 1);
+    resetForms();
+  };
+
+  const submitResource = async (e) => {
+    e.preventDefault();
+    if (editId) {
+      await axios.put(`/api/admin/resources/${editId}`, newRes);
+    } else {
+      await axios.post("/api/admin/resources", newRes);
+    }
+    setRefreshTrigger((prev) => prev + 1);
+    resetForms();
+  };
+
+  const submitParking = async (e) => {
+    e.preventDefault();
+    if (editId) {
+      await axios.put(`/api/admin/parkings/${editId}`, newPark);
+    } else {
+      await axios.post("/api/admin/parkings", newPark);
+    }
+    setRefreshTrigger((prev) => prev + 1);
+    resetForms();
+  };
+
+  const submitSpace = async (e) => {
     e.preventDefault();
     const resIds = newSpace.resourceIdsStr
       ? newSpace.resourceIdsStr.split(",").map((s) => parseInt(s.trim()))
       : [];
-    await axios.post("/api/admin/spaces", { ...newSpace, resourceIds: resIds });
-    setNewSpace({
-      name: "",
-      locationId: "",
-      type: "WORKSPACE",
-      description: "",
-      resourceIdsStr: "",
-    });
+    const payload = { ...newSpace, resourceIds: resIds };
+
+    if (editId) {
+      await axios.put(`/api/admin/spaces/${editId}`, payload);
+    } else {
+      await axios.post("/api/admin/spaces", payload);
+    }
     setRefreshTrigger((prev) => prev + 1);
+    resetForms();
   };
+
+  const CancelButton = () =>
+    editId ? (
+      <button
+        type="button"
+        className="form-button secondary"
+        onClick={resetForms}
+        style={{ marginLeft: "10px", background: "#d9534f" }}
+      >
+        Cancel Edit
+      </button>
+    ) : null;
 
   return (
     <div className="admin-container">
@@ -218,8 +282,8 @@ const AdminPage = () => {
       {activeTab === "locations" && (
         <div>
           <div className="admin-form">
-            <h3>Add Location</h3>
-            <form onSubmit={createLocation}>
+            <h3>{editId ? `Edit Location #${editId}` : "Add Location"}</h3>
+            <form onSubmit={submitLocation}>
               <div className="form-row">
                 <input
                   className="form-input"
@@ -258,9 +322,12 @@ const AdminPage = () => {
                   }
                 />
               </div>
-              <button className="form-button" style={{ marginTop: "10px" }}>
-                Save Location
-              </button>
+              <div style={{ marginTop: "10px" }}>
+                <button className="form-button">
+                  {editId ? "Update Location" : "Save Location"}
+                </button>
+                <CancelButton />
+              </div>
             </form>
           </div>
 
@@ -270,7 +337,7 @@ const AdminPage = () => {
                 <th>ID</th>
                 <th>Name</th>
                 <th>City</th>
-                <th>Action</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -280,6 +347,13 @@ const AdminPage = () => {
                   <td>{l.name}</td>
                   <td>{l.city}</td>
                   <td>
+                    <button
+                      className="delete-btn"
+                      style={{ background: "#f0ad4e", marginRight: "5px" }}
+                      onClick={() => handleEditLocation(l)}
+                    >
+                      Edit
+                    </button>
                     <button
                       className="delete-btn"
                       onClick={() => handleDelete("/api/admin/locations", l.id)}
@@ -297,8 +371,8 @@ const AdminPage = () => {
       {activeTab === "spaces" && (
         <div>
           <div className="admin-form">
-            <h3>Add Space</h3>
-            <form onSubmit={createSpace}>
+            <h3>{editId ? `Edit Space #${editId}` : "Add Space"}</h3>
+            <form onSubmit={submitSpace}>
               <div className="form-row">
                 <input
                   className="form-input"
@@ -341,7 +415,10 @@ const AdminPage = () => {
                   placeholder="Resource IDs (ex: 1, 2)"
                   value={newSpace.resourceIdsStr}
                   onChange={(e) =>
-                    setNewSpace({ ...newSpace, resourceIdsStr: e.target.value })
+                    setNewSpace({
+                      ...newSpace,
+                      resourceIdsStr: e.target.value,
+                    })
                   }
                 />
               </div>
@@ -354,9 +431,12 @@ const AdminPage = () => {
                   setNewSpace({ ...newSpace, description: e.target.value })
                 }
               />
-              <button className="form-button" style={{ marginTop: "10px" }}>
-                Save Space
-              </button>
+              <div style={{ marginTop: "10px" }}>
+                <button className="form-button">
+                  {editId ? "Update Space" : "Save Space"}
+                </button>
+                <CancelButton />
+              </div>
             </form>
           </div>
 
@@ -367,7 +447,7 @@ const AdminPage = () => {
                 <th>Name</th>
                 <th>Type</th>
                 <th>Location</th>
-                <th>Action</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -378,6 +458,23 @@ const AdminPage = () => {
                   <td>{s.type}</td>
                   <td>{s.locationName}</td>
                   <td>
+                    <button
+                      className="delete-btn"
+                      style={{ background: "#f0ad4e", marginRight: "5px" }}
+                      onClick={() => {
+                        setEditId(s.id);
+                        setNewSpace({
+                          name: s.name,
+                          type: s.type,
+                          locationId: "",
+                          description: "",
+                          resourceIdsStr: "",
+                        });
+                        window.scrollTo(0, 0);
+                      }}
+                    >
+                      Edit
+                    </button>
                     <button
                       className="delete-btn"
                       onClick={() => handleDelete("/api/admin/spaces", s.id)}
@@ -395,8 +492,8 @@ const AdminPage = () => {
       {activeTab === "resources" && (
         <div>
           <div className="admin-form">
-            <h3>Add Resource</h3>
-            <form onSubmit={createResource}>
+            <h3>{editId ? `Edit Resource #${editId}` : "Add Resource"}</h3>
+            <form onSubmit={submitResource}>
               <div className="form-row">
                 <input
                   className="form-input"
@@ -416,9 +513,12 @@ const AdminPage = () => {
                   }
                 />
               </div>
-              <button className="form-button" style={{ marginTop: "10px" }}>
-                Save Resource
-              </button>
+              <div style={{ marginTop: "10px" }}>
+                <button className="form-button">
+                  {editId ? "Update Resource" : "Save Resource"}
+                </button>
+                <CancelButton />
+              </div>
             </form>
           </div>
 
@@ -428,7 +528,7 @@ const AdminPage = () => {
                 <th>ID</th>
                 <th>Name</th>
                 <th>Assigned To</th>
-                <th>Action</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -438,6 +538,13 @@ const AdminPage = () => {
                   <td>{r.name}</td>
                   <td>{r.spaceName}</td>
                   <td>
+                    <button
+                      className="delete-btn"
+                      style={{ background: "#f0ad4e", marginRight: "5px" }}
+                      onClick={() => handleEditResource(r)}
+                    >
+                      Edit
+                    </button>
                     <button
                       className="delete-btn"
                       onClick={() => handleDelete("/api/admin/resources", r.id)}
@@ -455,8 +562,8 @@ const AdminPage = () => {
       {activeTab === "parkings" && (
         <div>
           <div className="admin-form">
-            <h3>Add Parking Spot</h3>
-            <form onSubmit={createParking}>
+            <h3>{editId ? `Edit Spot #${editId}` : "Add Parking Spot"}</h3>
+            <form onSubmit={submitParking}>
               <div className="form-row">
                 <select
                   className="form-input"
@@ -484,9 +591,12 @@ const AdminPage = () => {
                   required
                 />
               </div>
-              <button className="form-button" style={{ marginTop: "10px" }}>
-                Save Spot
-              </button>
+              <div style={{ marginTop: "10px" }}>
+                <button className="form-button">
+                  {editId ? "Update Spot" : "Save Spot"}
+                </button>
+                <CancelButton />
+              </div>
             </form>
           </div>
 
@@ -496,7 +606,7 @@ const AdminPage = () => {
                 <th>ID</th>
                 <th>Spot #</th>
                 <th>Location</th>
-                <th>Action</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -506,6 +616,13 @@ const AdminPage = () => {
                   <td>{p.spotNumber}</td>
                   <td>{p.locationName}</td>
                   <td>
+                    <button
+                      className="delete-btn"
+                      style={{ background: "#f0ad4e", marginRight: "5px" }}
+                      onClick={() => handleEditParking(p)}
+                    >
+                      Edit
+                    </button>
                     <button
                       className="delete-btn"
                       onClick={() => handleDelete("/api/admin/parkings", p.id)}

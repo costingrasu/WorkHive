@@ -151,4 +151,59 @@ public class AdminService {
     public void deleteReservation(Integer id) {
         reservationRepository.deleteById(id);
     }
+
+    public void updateLocation(Integer id, LocationCreateDTO dto) {
+        Location location = locationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Location not found"));
+
+        location.setName(dto.getName());
+        location.setCity(dto.getCity());
+        location.setAddress(dto.getAddress());
+        location.setFloor(dto.getFloor());
+
+        locationRepository.save(location);
+    }
+
+    public void updateResource(Integer id, ResourceCreateDTO dto) {
+        Resource resource = resourceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Resource not found"));
+
+        resource.setName(dto.getName());
+        resource.setDescription(dto.getDescription());
+
+        resourceRepository.save(resource);
+    }
+
+    public void updateParking(Integer id, ParkingCreateDTO dto) {
+        Parking parking = parkingRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Parking not found"));
+
+        Location location = locationRepository.findById(dto.getLocationId())
+                .orElseThrow(() -> new RuntimeException("Location not found"));
+
+        parking.setSpotNumber(dto.getSpotNumber());
+        parking.setLocation(location);
+
+        parkingRepository.save(parking);
+    }
+
+    public void updateSpace(Integer id, SpaceCreateDTO dto) {
+        Space space = spaceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Space not found"));
+
+        Location location = locationRepository.findById(dto.getLocationId())
+                .orElseThrow(() -> new RuntimeException("Location not found"));
+
+        space.setName(dto.getName());
+        space.setType(SpaceType.valueOf(dto.getType()));
+        space.setDescription(dto.getDescription());
+        space.setLocation(location);
+
+        if (dto.getResourceIds() != null) {
+            List<Resource> resources = resourceRepository.findAllById(dto.getResourceIds());
+            space.setResources(new HashSet<>(resources));
+        }
+
+        spaceRepository.save(space);
+    }
 }
