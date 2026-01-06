@@ -94,3 +94,51 @@
   text-shadow: none;
   font-weight: normal;
 }
+
+.logo-container {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 5px 0;
+  align-items: center;
+}
+
+.main-logo-text {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2rem;
+  color: #5a4b3d;
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 2;
+  text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.5);
+}
+
+.hover-slogan {
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.8rem;
+  color: #7a6e5a;
+  
+  white-space: normal; 
+  width: 120px;
+  text-align: center;
+  line-height: 1.1;
+  
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.logo-container:hover .main-logo-text {
+  transform: translateY(-12px);
+}
+
+.logo-container:hover .hover-slogan {
+  opacity: 1;
+  transform: translate(-50%, 5px); 
+}

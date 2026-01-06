@@ -15,8 +15,11 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-brand">
-        <Link to="/" className="navbar-logo">
-          WORK HIVE
+        <Link to="/" className="logo-container">
+          <span className="main-logo-text">WORK HIVE</span>
+          <span className="hover-slogan">
+            Reserve the place you need to bee!
+          </span>
         </Link>
       </div>
       <div className="navbar-links">

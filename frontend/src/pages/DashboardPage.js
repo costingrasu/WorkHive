@@ -117,9 +117,11 @@ const DashboardPage = () => {
         </>
       )}
 
-      <p style={{ marginTop: "2rem" }}>Reserve the place you need to bee!</p>
-
-      <button onClick={handleLogout} className="logout-button">
+      <button
+        onClick={handleLogout}
+        className="logout-button"
+        style={{ marginTop: "2rem" }}
+      >
         Logout
       </button>
     </div>
