@@ -436,10 +436,11 @@ body {
 }
 
 .step-title {
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: #5a4b3d;
   margin-bottom: 1.5rem;
   text-align: center;
+  font-family: 'Fredoka One', cursive;
 }
 
 .parking-option {

@@ -191,7 +191,7 @@ const MakeReservationPage = () => {
 
       {step === 2 && (
         <div>
-          <h2 className="step-title">Available Spaces</h2>
+          <h3 className="step-title">Available Spaces</h3>
 
           <div className="spaces-grid">
             {availableSpaces.map((space) => (
@@ -222,7 +222,7 @@ const MakeReservationPage = () => {
 
       {step === 3 && selectedSpace && (
         <div>
-          <h2 className="step-title">Confirm Reservation</h2>
+          <h3 className="step-title">Confirm Reservation</h3>
 
           <div className="confirmation-details">
             <p>
