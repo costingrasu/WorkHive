@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useBlocker } from "react-router-dom";
+import { createPortal } from "react-dom";
 import "../styles/Forms.css";
 
 const MakeReservationPage = () => {
@@ -21,6 +22,20 @@ const MakeReservationPage = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const isDirty = locationId !== "" || start !== "" || end !== "" || step > 1;
+
+  const blocker = useBlocker(
+    ({ currentLocation, nextLocation }) =>
+      isDirty && currentLocation.pathname !== nextLocation.pathname
+  );
+
+  const resetFormState = () => {
+    setLocationId("");
+    setStart("");
+    setEnd("");
+    setStep(1);
+  };
 
   useEffect(() => {
     axios
@@ -75,6 +90,8 @@ const MakeReservationPage = () => {
         wantsParking: wantsParking,
         notes: notes,
       });
+
+      resetFormState();
       navigate("/");
     } catch (err) {
       console.error(err);
@@ -104,6 +121,35 @@ const MakeReservationPage = () => {
 
   return (
     <div className="form-container reservation-wizard">
+      {blocker.state === "blocked"
+        ? createPortal(
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <h3>Unsaved Changes</h3>
+                <p>
+                  You have started a reservation. If you leave, your progress
+                  will be lost.
+                </p>
+                <div className="modal-actions">
+                  <button
+                    className="form-button secondary"
+                    onClick={() => blocker.reset()}
+                  >
+                    Keep Editing
+                  </button>
+                  <button
+                    className="form-button danger"
+                    onClick={() => blocker.proceed()}
+                  >
+                    Leave
+                  </button>
+                </div>
+              </div>
+            </div>,
+            document.body
+          )
+        : null}
+
       <h2>Make Reservation</h2>
 
       <div className="steps-indicator">
