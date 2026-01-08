@@ -144,3 +144,65 @@
   font-family: sans-serif;
   margin-left: 5px;
 }
+
+.input-group {
+  position: relative;
+  flex: 1; 
+  display: flex;
+  align-items: center;
+  width: 100%;
+  overflow: visible; 
+}
+
+.input-group .form-input {
+  width: 100%;
+  position: relative;
+  z-index: 1; 
+}
+
+.input-group::before {
+  content: '';
+  display: block;
+  width: 40px; 
+  height: 40px;
+  background-image: url('./assets/hand.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 50%;
+  z-index: 100; 
+  opacity: 0;
+  transition: all 0.2s ease-out;
+  pointer-events: none;
+}
+
+.input-group:first-child::before {
+  left: -40px; 
+  transform: translateY(-50%) translateX(-10px) rotate(0deg);
+}
+
+.input-group:first-child:focus-within::before,
+.input-group:first-child:hover::before {
+  opacity: 1;
+  transform: translateY(-50%) translateX(10px) rotate(10deg); 
+  left: -40px; 
+}
+
+.input-group:nth-child(2)::before {
+  right: -40px; 
+  left: auto;   
+  transform: translateY(-50%) translateX(10px) scaleX(-1) rotate(0deg); 
+}
+
+.input-group:nth-child(2):focus-within::before,
+.input-group:nth-child(2):hover::before {
+  opacity: 1;
+  transform: translateY(-50%) translateX(-10px) scaleX(-1) rotate(10deg); 
+  right: -40px; 
+}
+
+@media (max-width: 600px) {
+  .input-group::before {
+    display: none !important;
+  }
+}

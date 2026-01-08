@@ -298,42 +298,50 @@ const AdminPage = () => {
             <h3>{editId ? `Edit Location #${editId}` : "Add Location"}</h3>
             <form onSubmit={submitLocation}>
               <div className="form-row">
-                <input
-                  className="form-input"
-                  placeholder="Name"
-                  value={newLoc.name}
-                  onChange={(e) =>
-                    setNewLoc({ ...newLoc, name: e.target.value })
-                  }
-                  required
-                />
-                <input
-                  className="form-input"
-                  placeholder="City"
-                  value={newLoc.city}
-                  onChange={(e) =>
-                    setNewLoc({ ...newLoc, city: e.target.value })
-                  }
-                  required
-                />
+                <div className="input-group">
+                  <input
+                    className="form-input"
+                    placeholder="Name"
+                    value={newLoc.name}
+                    onChange={(e) =>
+                      setNewLoc({ ...newLoc, name: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+                <div className="input-group">
+                  <input
+                    className="form-input"
+                    placeholder="City"
+                    value={newLoc.city}
+                    onChange={(e) =>
+                      setNewLoc({ ...newLoc, city: e.target.value })
+                    }
+                    required
+                  />
+                </div>
               </div>
               <div className="form-row" style={{ marginTop: "10px" }}>
-                <input
-                  className="form-input"
-                  placeholder="Address"
-                  value={newLoc.address}
-                  onChange={(e) =>
-                    setNewLoc({ ...newLoc, address: e.target.value })
-                  }
-                />
-                <input
-                  className="form-input"
-                  placeholder="Floor info"
-                  value={newLoc.floor}
-                  onChange={(e) =>
-                    setNewLoc({ ...newLoc, floor: e.target.value })
-                  }
-                />
+                <div className="input-group">
+                  <input
+                    className="form-input"
+                    placeholder="Address"
+                    value={newLoc.address}
+                    onChange={(e) =>
+                      setNewLoc({ ...newLoc, address: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="input-group">
+                  <input
+                    className="form-input"
+                    placeholder="Floor info"
+                    value={newLoc.floor}
+                    onChange={(e) =>
+                      setNewLoc({ ...newLoc, floor: e.target.value })
+                    }
+                  />
+                </div>
               </div>
               <div style={{ marginTop: "10px" }}>
                 <button className="form-button">
@@ -387,63 +395,76 @@ const AdminPage = () => {
             <h3>{editId ? `Edit Space #${editId}` : "Add Space"}</h3>
             <form onSubmit={submitSpace}>
               <div className="form-row">
-                <input
-                  className="form-input"
-                  placeholder="Name"
-                  value={newSpace.name}
-                  onChange={(e) =>
-                    setNewSpace({ ...newSpace, name: e.target.value })
-                  }
-                  required
-                />
-                <select
-                  className="form-input"
-                  value={newSpace.locationId}
-                  onChange={(e) =>
-                    setNewSpace({ ...newSpace, locationId: e.target.value })
-                  }
-                  required
-                >
-                  <option value="">Select Location</option>
-                  {locations.map((l) => (
-                    <option key={l.id} value={l.id}>
-                      {l.name}
-                    </option>
-                  ))}
-                </select>
+                <div className="input-group">
+                  <input
+                    className="form-input"
+                    placeholder="Name"
+                    value={newSpace.name}
+                    onChange={(e) =>
+                      setNewSpace({ ...newSpace, name: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+                <div className="input-group">
+                  <select
+                    className="form-input"
+                    value={newSpace.locationId}
+                    onChange={(e) =>
+                      setNewSpace({ ...newSpace, locationId: e.target.value })
+                    }
+                    required
+                  >
+                    <option value="">Select Location</option>
+                    {locations.map((l) => (
+                      <option key={l.id} value={l.id}>
+                        {l.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
               <div className="form-row" style={{ marginTop: "10px" }}>
-                <select
-                  className="form-input"
-                  value={newSpace.type}
-                  onChange={(e) =>
-                    setNewSpace({ ...newSpace, type: e.target.value })
-                  }
-                >
-                  <option value="WORKSPACE">WORKSPACE</option>
-                  <option value="MEETING_ROOM">MEETING ROOM</option>
-                </select>
-                <input
-                  className="form-input"
-                  placeholder="Resource IDs (ex: 1, 2)"
-                  value={newSpace.resourceIdsStr}
-                  onChange={(e) =>
-                    setNewSpace({
-                      ...newSpace,
-                      resourceIdsStr: e.target.value,
-                    })
-                  }
-                />
+                <div className="input-group">
+                  <select
+                    className="form-input"
+                    value={newSpace.type}
+                    onChange={(e) =>
+                      setNewSpace({ ...newSpace, type: e.target.value })
+                    }
+                  >
+                    <option value="WORKSPACE">WORKSPACE</option>
+                    <option value="MEETING_ROOM">MEETING ROOM</option>
+                  </select>
+                </div>
+                <div className="input-group">
+                  <input
+                    className="form-input"
+                    placeholder="Resource IDs (ex: 1, 2)"
+                    value={newSpace.resourceIdsStr}
+                    onChange={(e) =>
+                      setNewSpace({
+                        ...newSpace,
+                        resourceIdsStr: e.target.value,
+                      })
+                    }
+                  />
+                </div>
               </div>
-              <textarea
-                className="form-input"
-                style={{ marginTop: "10px" }}
-                placeholder="Description"
-                value={newSpace.description}
-                onChange={(e) =>
-                  setNewSpace({ ...newSpace, description: e.target.value })
-                }
-              />
+
+              <div className="form-row" style={{ marginTop: "10px" }}>
+                <div className="input-group">
+                  <textarea
+                    className="form-input"
+                    placeholder="Description"
+                    value={newSpace.description}
+                    onChange={(e) =>
+                      setNewSpace({ ...newSpace, description: e.target.value })
+                    }
+                  />
+                </div>
+              </div>
+
               <div style={{ marginTop: "10px" }}>
                 <button className="form-button">
                   {editId ? "Update Space" : "Save Space"}
@@ -508,23 +529,27 @@ const AdminPage = () => {
             <h3>{editId ? `Edit Resource #${editId}` : "Add Resource"}</h3>
             <form onSubmit={submitResource}>
               <div className="form-row">
-                <input
-                  className="form-input"
-                  placeholder="Name"
-                  value={newRes.name}
-                  onChange={(e) =>
-                    setNewRes({ ...newRes, name: e.target.value })
-                  }
-                  required
-                />
-                <input
-                  className="form-input"
-                  placeholder="Description"
-                  value={newRes.description}
-                  onChange={(e) =>
-                    setNewRes({ ...newRes, description: e.target.value })
-                  }
-                />
+                <div className="input-group">
+                  <input
+                    className="form-input"
+                    placeholder="Name"
+                    value={newRes.name}
+                    onChange={(e) =>
+                      setNewRes({ ...newRes, name: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+                <div className="input-group">
+                  <input
+                    className="form-input"
+                    placeholder="Description"
+                    value={newRes.description}
+                    onChange={(e) =>
+                      setNewRes({ ...newRes, description: e.target.value })
+                    }
+                  />
+                </div>
               </div>
               <div style={{ marginTop: "10px" }}>
                 <button className="form-button">
@@ -578,31 +603,35 @@ const AdminPage = () => {
             <h3>{editId ? `Edit Spot #${editId}` : "Add Parking Spot"}</h3>
             <form onSubmit={submitParking}>
               <div className="form-row">
-                <select
-                  className="form-input"
-                  value={newPark.locationId}
-                  onChange={(e) =>
-                    setNewPark({ ...newPark, locationId: e.target.value })
-                  }
-                  required
-                >
-                  <option value="">Select Location</option>
-                  {locations.map((l) => (
-                    <option key={l.id} value={l.id}>
-                      {l.name}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="number"
-                  className="form-input"
-                  placeholder="Spot Number"
-                  value={newPark.spotNumber}
-                  onChange={(e) =>
-                    setNewPark({ ...newPark, spotNumber: e.target.value })
-                  }
-                  required
-                />
+                <div className="input-group">
+                  <select
+                    className="form-input"
+                    value={newPark.locationId}
+                    onChange={(e) =>
+                      setNewPark({ ...newPark, locationId: e.target.value })
+                    }
+                    required
+                  >
+                    <option value="">Select Location</option>
+                    {locations.map((l) => (
+                      <option key={l.id} value={l.id}>
+                        {l.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="input-group">
+                  <input
+                    type="number"
+                    className="form-input"
+                    placeholder="Spot Number"
+                    value={newPark.spotNumber}
+                    onChange={(e) =>
+                      setNewPark({ ...newPark, spotNumber: e.target.value })
+                    }
+                    required
+                  />
+                </div>
               </div>
               <div style={{ marginTop: "10px" }}>
                 <button className="form-button">
