@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -35,6 +36,8 @@ public class ReservationService {
                         .status(p.getStatus())
                         .notes(p.getNotes())
                         .build())
+                .sorted(Comparator.comparing((ReservationResponse r) -> "CONFIRMED".equalsIgnoreCase(r.getStatus()) ? 0 : 1)
+                        .thenComparing(ReservationResponse::getStart, Comparator.reverseOrder()))
                 .collect(Collectors.toList());
     }
 
