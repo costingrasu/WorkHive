@@ -2,13 +2,25 @@
 
 body {
   margin: 0;
+  
   background-color: #fdf8e1; 
   background-image: 
-    radial-gradient(ellipse at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.15) 100%),
-    radial-gradient(ellipse at 10% 20%, rgba(245, 225, 190, 0.4) 0%, transparent 70%),
-    radial-gradient(ellipse at 80% 90%, rgba(245, 225, 190, 0.5) 0%, transparent 70%);
+    radial-gradient(ellipse at center, 
+      rgba(0,0,0,0) 0%, 
+      rgba(0,0,0,0) 50%,
+      rgba(0,0,0,0.15) 100%),
+    
+    radial-gradient(ellipse at 10% 20%, 
+      rgba(245, 225, 190, 0.4) 0%, 
+      transparent 70%),
+      
+    radial-gradient(ellipse at 80% 90%, 
+      rgba(245, 225, 190, 0.5) 0%, 
+      transparent 70%);
+
   background-attachment: fixed;
   min-height: 100vh;
+
   font-family: 'Fredoka One', cursive;
   color: #212121;
 }
@@ -19,6 +31,7 @@ body {
   max-width: 450px;
   margin: 4rem auto; 
   padding: 2rem;
+  
   background-color: #f7e6c4; 
   background-image: 
     linear-gradient(30deg, rgba(235, 206, 160, 0.4) 12%, transparent 12.5%, transparent 87%, rgba(235, 206, 160, 0.4) 87.5%, rgba(235, 206, 160, 0.4)),
@@ -29,19 +42,50 @@ body {
     linear-gradient(60deg, rgba(247, 230, 196, 0.6) 25%, transparent 25.5%, transparent 75%, rgba(247, 230, 196, 0.6) 75%, rgba(247, 230, 196, 0.6));
   background-size: 40px 70px;
   background-position: 0 0, 0 0, 20px 35px, 20px 35px, 0 0, 20px 35px;
+  
   border: 3px solid #7a6e5a; 
   border-radius: 12px; 
   box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.3); 
   transform: rotate(-0.5deg); 
+  transition: all 0.3s ease;
 }
 
-.form-container h2 {
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin: 4rem auto; 
+  padding: 2rem;
+  
+  background-color: #f7e6c4; 
+  border: 3px solid #7a6e5a; 
+  border-radius: 12px; 
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.3); 
+  transform: rotate(-0.5deg); 
+
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.reservation-wizard {
+  max-width: 800px;
+}
+
+.form-container h2,
+.dashboard-container h2 {
   text-align: center;
   font-size: 2.5rem;
   margin-top: 0;
   margin-bottom: 1.5rem;
   color: #5a4b3d; 
   text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.6); 
+}
+
+.dashboard-container p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #5a4b3d;
+  margin-bottom: 2rem;
 }
 
 .input-wrapper {
@@ -119,55 +163,6 @@ body {
   box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
 }
 
-.form-error,
-.form-success {
-  text-align: center;
-  margin-bottom: 1rem;
-  padding: 0.75rem;
-  border-radius: 10px;
-  font-size: 1rem;
-  border: 2px solid; 
-  background-color: #fcf6e8; 
-}
-.form-error {
-  color: #922b2b; 
-  border-color: #922b2b;
-}
-.form-success {
-  color: #38761d; 
-  border-color: #38761d;
-}
-
-.dashboard-container {
-  display: flex;
-  flex-direction: column;
-  max-width: 600px;
-  margin: 4rem auto; 
-  padding: 2rem;
-  background-color: #f7e6c4; 
-  border: 3px solid #7a6e5a; 
-  border-radius: 12px; 
-  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.3); 
-  transform: rotate(-0.5deg); 
-  text-align: center;
-}
-
-.dashboard-container h2 {
-  text-align: center;
-  font-size: 2.5rem;
-  margin-top: 0;
-  margin-bottom: 1.5rem;
-  color: #5a4b3d; 
-  text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.6); 
-}
-
-.dashboard-container p {
-  font-size: 1.2rem;
-  line-height: 1.6;
-  color: #5a4b3d;
-  margin-bottom: 2rem;
-}
-
 .logout-button {
   font-family: 'Fredoka One', cursive;
   font-size: 1.25rem;
@@ -191,6 +186,41 @@ body {
 .logout-button:active {
   transform: translateY(1px) rotate(0deg);
   box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
+}
+
+.form-button.secondary {
+  background-color: #6c757d;
+  border-color: #545b62;
+}
+.form-button.secondary:hover {
+  background-color: #5a6268;
+}
+
+.form-button.danger {
+  background-color: #dc3545;
+  border-color: #b02a37;
+}
+.form-button.danger:hover {
+  background-color: #bb2d3b;
+}
+
+.form-error,
+.form-success {
+  text-align: center;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  border: 2px solid; 
+  background-color: #fcf6e8; 
+}
+.form-error {
+  color: #922b2b; 
+  border-color: #922b2b;
+}
+.form-success {
+  color: #38761d; 
+  border-color: #38761d;
 }
 
 .reservations-list {
@@ -263,23 +293,9 @@ body {
   font-weight: bold;
 }
 
-.status-confirmed {
-  background-color: #d4edda;
-  color: #155724;
-  border-color: #155724;
-}
-
-.status-cancelled {
-  background-color: #f8d7da;
-  color: #721c24;
-  border-color: #721c24;
-}
-
-.status-pending {
-  background-color: #fff3cd;
-  color: #856404;
-  border-color: #856404;
-}
+.status-confirmed { background-color: #d4edda; color: #155724; border-color: #155724; }
+.status-cancelled { background-color: #f8d7da; color: #721c24; border-color: #721c24; }
+.status-pending   { background-color: #fff3cd; color: #856404; border-color: #856404; }
 
 .res-details {
   font-family: sans-serif;
@@ -299,8 +315,23 @@ body {
   margin-top: 1rem;
 }
 
-.reservation-wizard {
-  max-width: 800px;
+.cancel-res-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #fff;
+  color: #d9534f;
+  border: 2px solid #d9534f;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.cancel-res-btn:hover {
+  background-color: #d9534f;
+  color: white;
 }
 
 .steps-indicator {
@@ -318,7 +349,7 @@ body {
   font-size: 1.2rem;
   position: relative;
   transition: all 0.3s ease;
-  color: #5a4b3d !important; 
+  color: #a1988a; 
 }
 
 .step.active {
@@ -387,13 +418,14 @@ body {
   margin-bottom: 0.5rem;
 }
 
-.form-button.secondary {
-  background-color: #d9534f;
-  border-color: #b52b27;
-}
-
-.form-button.secondary:hover {
-  background-color: #c9302c;
+.resource-tags-container { margin-top: 0.5rem; }
+.resource-tag {
+  background: #eee;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  margin-right: 5px;
+  display: inline-block;
 }
 
 .step-title {
@@ -437,20 +469,8 @@ body {
   color: #555;
 }
 
-.confirmation-details strong {
-  color: #5a4b3d;
-}
-
-.notes-container {
-  text-align: left;
-  margin-top: 1rem;
-}
-.notes-container label {
-  display: block;
-  font-weight: bold;
-  color: #5a4b3d;
-  margin-bottom: 0.5rem;
-}
+.notes-container { text-align: left; margin-top: 1rem; }
+.notes-container label { display: block; font-weight: bold; color: #5a4b3d; margin-bottom: 0.5rem; }
 .notes-container textarea {
   width: 100%;
   padding: 0.8rem;
@@ -466,74 +486,19 @@ body {
   justify-content: center;
   margin-top: 10px;
 }
-
-.radio-label {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  cursor: pointer;
-}
-
-.resource-tags-container {
-  margin-top: 0.5rem;
-}
-
-.resource-tag {
-  background: #eee;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  margin-right: 5px;
-  display: inline-block;
-}
-
-.parking-label-content {
-  margin: 0;
-  cursor: pointer;
-}
-
-.parking-hint {
-  font-size: 0.9rem;
-  color: #666;
-  font-weight: normal;
-}
+.radio-label { display: flex; align-items: center; gap: 5px; cursor: pointer; }
 
 .form-actions {
   display: flex;
   gap: 1rem;
   margin-top: 2rem;
 }
-
-.btn-flex-1 {
-  flex: 1;
-}
-
-.btn-flex-2 {
-  flex: 2;
-}
+.btn-flex-1 { flex: 1; }
+.btn-flex-2 { flex: 2; }
 
 .wizard-form .input-wrapper::before {
   display: none;
   content: none;
-}
-
-.cancel-res-btn {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: #fff;
-  color: #d9534f;
-  border: 2px solid #d9534f;
-  border-radius: 6px;
-  cursor: pointer;
-  font-family: 'Fredoka One', cursive;
-  font-size: 0.9rem;
-  transition: all 0.2s;
-  width: 100%;
-}
-
-.cancel-res-btn:hover {
-  background-color: #d9534f;
-  color: white;
 }
 
 .modal-overlay {
@@ -575,27 +540,109 @@ body {
   justify-content: center;
 }
 
-.form-button.danger {
-  background-color: #dc3545;
-  color: white;
-  border: none;
-}
-
-.form-button.danger:hover {
-  background-color: #bb2d3b;
-}
-
-.form-button.secondary {
-  background-color: #6c757d;
-  color: white;
-  border: none;
-}
-
-.form-button.secondary:hover {
-  background-color: #5a6268;
-}
-
 @keyframes popIn {
   from { transform: scale(0.8); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
+}
+
+@media (max-width: 768px) {
+
+  .form-container,
+  .dashboard-container,
+  .reservation-wizard {
+    width: 96%;           
+    max-width: 100%;       
+    margin: 1.5rem auto 100px auto; 
+    padding: 1rem;       
+    transform: rotate(0deg); 
+    box-sizing: border-box; 
+  }
+  
+  .form-container h2, 
+  .dashboard-container h2,
+  .step-title {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+  
+  .input-wrapper::before,
+  .reservation-card::before,
+  .step.active::before {
+    display: none !important;
+  }
+  
+  .steps-indicator {
+    padding-left: 0;
+    padding-right: 0;
+    margin-bottom: 1.5rem;
+    justify-content: space-between;
+    gap: 5px;
+  }
+  
+  .step {
+    font-size: 0.85rem;
+  }
+  
+  .radio-group-container {
+    gap: 10px;
+    justify-content: space-around;
+  }
+  
+  .radio-label {
+    white-space: nowrap;
+    font-size: 0.95rem;
+  }
+
+  .notes-container textarea {
+    box-sizing: border-box; 
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .modal-content {
+    width: 85%; 
+    max-width: 340px; 
+    padding: 1.5rem;
+    box-sizing: border-box;
+  }
+  
+  .spaces-grid {
+    grid-template-columns: 1fr; 
+    gap: 1rem;
+  }
+  
+  .reservation-header {
+    flex-direction: column; 
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .res-status {
+    align-self: flex-start; 
+    font-size: 0.8rem;
+  }
+  
+  .form-button, .logout-button, .form-input {
+    font-size: 1rem;
+    padding: 0.8rem;
+  }
+  
+  .modal-actions {
+    flex-direction: column; 
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+  }
+  
+  .modal-actions button {
+    width: 100%;
+  }
+  
+  .dashboard-container .logout-button {
+    width: 100%;
+    margin-top: 1.5rem !important;
+  }
+  
+  input[type="datetime-local"] {
+    max-width: 100%;
+  }
 }

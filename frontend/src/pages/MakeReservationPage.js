@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useNavigate, useBlocker } from "react-router-dom";
 import { createPortal } from "react-dom";
@@ -23,12 +23,15 @@ const MakeReservationPage = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const isSubmitting = useRef(false);
 
   const isDirty = locationId !== "" || start !== "" || end !== "" || step > 1;
 
   const blocker = useBlocker(
     ({ currentLocation, nextLocation }) =>
-      isDirty && currentLocation.pathname !== nextLocation.pathname
+      isDirty &&
+      !isSubmitting.current &&
+      currentLocation.pathname !== nextLocation.pathname
   );
 
   const resetFormState = () => {
@@ -84,6 +87,8 @@ const MakeReservationPage = () => {
   const handleConfirm = async () => {
     setLoading(true);
     try {
+      isSubmitting.current = true;
+
       await axios.post("/api/reservations", {
         spaceId: selectedSpace.id,
         start: start,
@@ -96,6 +101,8 @@ const MakeReservationPage = () => {
       navigate("/");
     } catch (err) {
       console.error(err);
+      isSubmitting.current = false;
+
       const msg =
         err.response?.data?.message ||
         "Could not save reservation. Parking might be full.";
