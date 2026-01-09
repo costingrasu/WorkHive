@@ -88,7 +88,7 @@ const Navbar = () => {
                 </div>
               </li>
               <li>
-                <button onClick={handleLogout} className="nav-link logout-btn">
+                <button onClick={handleLogout} className="logout-btn">
                   Logout
                 </button>
               </li>
@@ -101,7 +101,7 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/register" className="nav-link register-btn">
+                <Link to="/register" className="register-btn">
                   Register
                 </Link>
               </li>
