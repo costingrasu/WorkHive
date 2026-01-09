@@ -2,6 +2,21 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import "../styles/Admin.css";
 
+const CancelButton = ({ editId, onCancel }) => {
+  if (!editId) return null;
+
+  return (
+    <button
+      type="button"
+      className="form-button secondary"
+      onClick={onCancel}
+      style={{ marginLeft: "10px", background: "#d9534f" }}
+    >
+      Cancel Edit
+    </button>
+  );
+};
+
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [loading, setLoading] = useState(false);
@@ -178,18 +193,6 @@ const AdminPage = () => {
     resetForms();
   };
 
-  const CancelButton = () =>
-    editId ? (
-      <button
-        type="button"
-        className="form-button secondary"
-        onClick={resetForms}
-        style={{ marginLeft: "10px", background: "#d9534f" }}
-      >
-        Cancel Edit
-      </button>
-    ) : null;
-
   return (
     <div className="admin-container">
       <h2>Admin Panel 🛠️</h2>
@@ -258,7 +261,7 @@ const AdminPage = () => {
           )}
 
           <h3 style={{ marginTop: "2rem" }}>📅 All Reservations</h3>
-          <div style={{ maxHeight: "300px", overflowY: "scroll" }}>
+          <div className="table-scroll-container">
             <table className="data-table">
               <thead>
                 <tr>
@@ -347,7 +350,7 @@ const AdminPage = () => {
                 <button className="form-button">
                   {editId ? "Update Location" : "Save Location"}
                 </button>
-                <CancelButton />
+                <CancelButton editId={editId} onCancel={resetForms} />
               </div>
             </form>
           </div>
@@ -469,7 +472,7 @@ const AdminPage = () => {
                 <button className="form-button">
                   {editId ? "Update Space" : "Save Space"}
                 </button>
-                <CancelButton />
+                <CancelButton editId={editId} onCancel={resetForms} />
               </div>
             </form>
           </div>
@@ -555,7 +558,7 @@ const AdminPage = () => {
                 <button className="form-button">
                   {editId ? "Update Resource" : "Save Resource"}
                 </button>
-                <CancelButton />
+                <CancelButton editId={editId} onCancel={resetForms} />
               </div>
             </form>
           </div>
@@ -637,7 +640,7 @@ const AdminPage = () => {
                 <button className="form-button">
                   {editId ? "Update Spot" : "Save Spot"}
                 </button>
-                <CancelButton />
+                <CancelButton editId={editId} onCancel={resetForms} />
               </div>
             </form>
           </div>

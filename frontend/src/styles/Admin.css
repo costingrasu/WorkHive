@@ -65,6 +65,11 @@
   background-color: #fff8e1;
 }
 
+.table-scroll-container {
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
 .admin-form {
   background: #fff;
   padding: 1.5rem;
