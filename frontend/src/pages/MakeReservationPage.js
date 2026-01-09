@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useBlocker } from "react-router-dom";
 import { createPortal } from "react-dom";
+import { formatDate } from "../utils/dateUtils";
 import "../styles/Forms.css";
 
 const MakeReservationPage = () => {
@@ -107,16 +108,6 @@ const MakeReservationPage = () => {
   const getSelectedLocationName = () => {
     const loc = locations.find((l) => l.id === Number(locationId));
     return loc ? loc.name : "Unknown Location";
-  };
-
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleString("ro-RO", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
   };
 
   return (

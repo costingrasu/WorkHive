@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { createPortal } from "react-dom";
 import { useAuth } from "../context/AuthContext";
+import { formatDate } from "../utils/dateUtils";
 import "../styles/Forms.css";
 
 const DashboardPage = () => {
@@ -12,6 +14,9 @@ const DashboardPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  const [showModal, setShowModal] = useState(false);
+  const [reservationToCancel, setReservationToCancel] = useState(null);
 
   useEffect(() => {
     const fetchReservations = async () => {
@@ -34,31 +39,55 @@ const DashboardPage = () => {
     navigate("/login");
   };
 
-  const handleCancel = async (id) => {
-    if (!window.confirm("Are you sure you want to cancel this reservation?"))
-      return;
+  const initiateCancel = (id) => {
+    setReservationToCancel(id);
+    setShowModal(true);
+  };
+
+  const confirmCancel = async () => {
+    if (!reservationToCancel) return;
 
     try {
-      await axios.put(`/api/reservations/${id}/cancel`);
+      await axios.put(`/api/reservations/${reservationToCancel}/cancel`);
       setRefreshTrigger((prev) => prev + 1);
     } catch (err) {
       alert("Could not cancel reservation.");
       console.error(err);
+    } finally {
+      setShowModal(false);
+      setReservationToCancel(null);
     }
   };
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleString("ro-RO", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+  const closeModal = () => {
+    setShowModal(false);
+    setReservationToCancel(null);
   };
 
   return (
     <div className="dashboard-container">
+      {showModal &&
+        createPortal(
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h3>Cancel Reservation?</h3>
+              <p>
+                Are you sure you want to cancel this reservation? This action
+                cannot be undone.
+              </p>
+              <div className="modal-actions">
+                <button className="form-button secondary" onClick={closeModal}>
+                  No, Keep it
+                </button>
+                <button className="form-button danger" onClick={confirmCancel}>
+                  Yes, Cancel
+                </button>
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
+
       <h2>My Reservations</h2>
 
       {loading && <p>Loading...</p>}
@@ -105,7 +134,7 @@ const DashboardPage = () => {
                   {res.status !== "CANCELLED" && (
                     <button
                       className="cancel-res-btn"
-                      onClick={() => handleCancel(res.id)}
+                      onClick={() => initiateCancel(res.id)}
                     >
                       Cancel Reservation
                     </button>
