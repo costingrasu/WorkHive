@@ -1,0 +1,141 @@
+.intro-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  
+  background-color: #5a4b3d;
+  background-image: url('./assets/bg1.svg'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+  transition: opacity 0.5s ease-in-out;
+}
+
+.intro-overlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.intro-logo-container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  margin: 0;
+  padding: 0;
+
+  transition: 
+    top 0.8s cubic-bezier(0.65, 0, 0.35, 1),
+    left 0.8s cubic-bezier(0.65, 0, 0.35, 1),
+    transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+    
+  width: auto;
+  pointer-events: none; 
+}
+
+.intro-logo-text {
+  font-family: 'Fredoka One', cursive;
+  margin: 0;
+  line-height: 1;
+  white-space: nowrap;
+
+  font-size: 5rem; 
+  color: #fdf8e1;
+  text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+  
+  transition: all 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.intro-slogan {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem;
+  color: #fdf8e1;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  margin-top: 15px;
+
+  opacity: 0; 
+  max-height: 50px;
+  
+  animation: sloganPopIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  animation-delay: 0.6s;
+}
+
+@keyframes sloganPopIn {
+  0% { 
+    transform: translateY(-20px); 
+    opacity: 0; 
+  }
+  100% { 
+    transform: translateY(0); 
+    opacity: 1; 
+  }
+}
+
+@keyframes sloganPopOut {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+    max-height: 50px;
+    margin-top: 15px;
+  }
+  100% {
+    transform: translateY(-20px);
+    opacity: 0;
+    max-height: 0;
+    margin-top: 0;
+  }
+}
+
+@keyframes popInLogo {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.intro-logo-container.animate-pop .intro-logo-text {
+  animation: popInLogo 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.intro-overlay.slogan-hidden .intro-slogan {
+  animation: sloganPopOut 0.5s ease-in forwards;
+}
+
+.intro-overlay.move-phase .intro-logo-container {
+  top: var(--target-top); 
+  left: var(--target-left);
+
+  transform: translate(0, 0); 
+
+  align-items: flex-start; 
+}
+
+.intro-overlay.move-phase .intro-logo-text {
+  font-size: 2rem; 
+  color: #5a4b3d; 
+  text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.5); 
+}
+
+@media (max-width: 768px) {
+  .intro-logo-text {
+    font-size: 3.5rem;
+  }
+  
+  .intro-slogan {
+    font-size: 1rem;
+    width: 90vw;
+    max-width: 300px;
+    text-align: center; 
+  }
+  
+  .intro-overlay.move-phase .intro-logo-text {
+    font-size: 1.5rem;
+  }
+}
