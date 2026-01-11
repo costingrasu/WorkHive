@@ -521,6 +521,20 @@ body {
   justify-content: center;
 }
 
+.filters-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.filters-container .form-input {
+  width: auto;
+  min-width: 160px;
+  padding: 8px 12px;
+}
+
 @keyframes popIn {
   from { transform: scale(0.8); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
@@ -549,7 +563,7 @@ body {
   .input-wrapper::before,
   .reservation-card::before,
   .step.active::before {
-    display: none !important;
+    display: none;
   }
   
   .steps-indicator {
@@ -620,10 +634,21 @@ body {
   
   .dashboard-container .logout-button {
     width: 100%;
-    margin-top: 1.5rem !important;
+    margin-top: 1.5rem;
   }
   
   input[type="datetime-local"] {
     max-width: 100%;
+  }
+
+  .filters-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .filters-container .form-input {
+    width: 100%;
+    font-size: 1rem;
+    padding: 0.8rem;
   }
 }

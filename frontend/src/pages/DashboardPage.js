@@ -14,14 +14,37 @@ const DashboardPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [locations, setLocations] = useState([]);
+  const [filterStatus, setFilterStatus] = useState("ALL");
+  const [filterLocation, setFilterLocation] = useState("ALL");
+  const [sortOrder, setSortOrder] = useState("desc");
 
   const [showModal, setShowModal] = useState(false);
   const [reservationToCancel, setReservationToCancel] = useState(null);
 
   useEffect(() => {
-    const fetchReservations = async () => {
+    const fetchLocations = async () => {
       try {
-        const response = await axios.get("/api/reservations/my-reservations");
+        const res = await axios.get("/api/locations");
+        setLocations(res.data);
+      } catch (e) {
+        console.error("Could not fetch locations for filter");
+      }
+    };
+    fetchLocations();
+  }, []);
+
+  useEffect(() => {
+    const fetchReservations = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get("/api/reservations/my-reservations", {
+          params: {
+            status: filterStatus === "ALL" ? "" : filterStatus,
+            location: filterLocation === "ALL" ? "" : filterLocation,
+            sort: sortOrder,
+          },
+        });
         setReservations(response.data);
       } catch (err) {
         console.error("Loading reservations error:", err);
@@ -32,7 +55,7 @@ const DashboardPage = () => {
     };
 
     fetchReservations();
-  }, [refreshTrigger]);
+  }, [refreshTrigger, filterStatus, filterLocation, sortOrder]);
 
   const handleLogout = () => {
     logout();
@@ -90,6 +113,40 @@ const DashboardPage = () => {
 
       <h2>My Reservations</h2>
 
+      <div className="filters-container">
+        <select
+          className="form-input"
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+        >
+          <option value="desc">Newest First</option>
+          <option value="asc">Oldest First</option>
+        </select>
+
+        <select
+          className="form-input"
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value)}
+        >
+          <option value="ALL">All Statuses</option>
+          <option value="CONFIRMED">Confirmed</option>
+          <option value="CANCELLED">Cancelled</option>
+        </select>
+
+        <select
+          className="form-input"
+          value={filterLocation}
+          onChange={(e) => setFilterLocation(e.target.value)}
+        >
+          <option value="ALL">All Locations</option>
+          {locations.map((loc) => (
+            <option key={loc.id} value={loc.name}>
+              {loc.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {loading && <p>Loading...</p>}
 
       {error && <div className="form-error">{error}</div>}
@@ -97,7 +154,7 @@ const DashboardPage = () => {
       {!loading && !error && (
         <>
           {reservations.length === 0 ? (
-            <p className="no-reservations">No reservations yet.</p>
+            <p className="no-reservations">No reservations found.</p>
           ) : (
             <div className="reservations-list">
               {reservations.map((res) => (

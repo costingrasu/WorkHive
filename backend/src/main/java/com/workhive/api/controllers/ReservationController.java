@@ -19,11 +19,15 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @GetMapping("/my-reservations")
-    public ResponseEntity<List<ReservationResponse>> getMyReservations() {
+    public ResponseEntity<List<ReservationResponse>> getMyReservations(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false, defaultValue = "desc") String sort
+    ) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        return ResponseEntity.ok(reservationService.getMyReservations(email));
+        return ResponseEntity.ok(reservationService.getMyReservations(email, status, location, sort));
     }
 
     @PostMapping

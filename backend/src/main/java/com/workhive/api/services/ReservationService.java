@@ -22,7 +22,8 @@ public class ReservationService {
     private final SpaceRepository spaceRepository;
     private final ParkingRepository parkingRepository;
 
-    public List<ReservationResponse> getMyReservations(String userEmail) {
+    public List<ReservationResponse> getMyReservations(String userEmail, String statusFilter, String locationFilter, String sortOrder) {
+
         List<ReservationProjection> projections = reservationRepository.findReservationByUserEmail(userEmail);
 
         return projections.stream()
@@ -36,8 +37,25 @@ public class ReservationService {
                         .status(p.getStatus())
                         .notes(p.getNotes())
                         .build())
-                .sorted(Comparator.comparing((ReservationResponse r) -> "CONFIRMED".equalsIgnoreCase(r.getStatus()) ? 0 : 1)
-                        .thenComparing(ReservationResponse::getStart, Comparator.reverseOrder()))
+                .filter(res -> {
+                    if (statusFilter == null || statusFilter.isEmpty() || statusFilter.equals("ALL")) {
+                        return true;
+                    }
+                    return res.getStatus().equalsIgnoreCase(statusFilter);
+                })
+                .filter(res -> {
+                    if (locationFilter == null || locationFilter.isEmpty() || locationFilter.equals("ALL")) {
+                        return true;
+                    }
+                    return res.getLocationName().equalsIgnoreCase(locationFilter);
+                })
+                .sorted((r1, r2) -> {
+                    if ("asc".equalsIgnoreCase(sortOrder)) {
+                        return r1.getStart().compareTo(r2.getStart());
+                    } else {
+                        return r2.getStart().compareTo(r1.getStart());
+                    }
+                })
                 .collect(Collectors.toList());
     }
 
