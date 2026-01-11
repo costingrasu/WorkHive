@@ -27,6 +27,16 @@ public class AuthService {
                     throw new IllegalArgumentException("Email already in use");
                 });
 
+        if (request.getConfirmPassword() == null || !request.getPassword().equals(request.getConfirmPassword())) {
+            throw new IllegalArgumentException("Passwords do not match");
+        }
+
+        String passwordPattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
+
+        if (!request.getPassword().matches(passwordPattern)) {
+            throw new IllegalArgumentException("Password must be at least 8 characters, with 1 uppercase, 1 lowercase, 1 number, and 1 special char.");
+        }
+
         User user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -39,9 +49,7 @@ public class AuthService {
 
         var jwtToken = jwtService.generateToken(user);
 
-        return AuthResponse.builder()
-                .token(jwtToken)
-                .build();
+        return AuthResponse.builder().token(jwtToken).build();
     }
 
     public AuthResponse login(LoginRequest request) {

@@ -4,7 +4,6 @@ import "../styles/Admin.css";
 
 const CancelButton = ({ editId, onCancel }) => {
   if (!editId) return null;
-
   return (
     <button
       type="button"
@@ -21,8 +20,8 @@ const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [loading, setLoading] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
-
   const [editId, setEditId] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   const [stats, setStats] = useState({
     inactiveUsers: [],
@@ -48,11 +47,22 @@ const AdminPage = () => {
     locationId: "",
     type: "WORKSPACE",
     description: "",
-    resourceIdsStr: "",
+    resourceIds: [],
   });
+
+  const uniqueResources = React.useMemo(() => {
+    const map = new Map();
+    resources.forEach((res) => {
+      if (!map.has(res.id)) {
+        map.set(res.id, res);
+      }
+    });
+    return Array.from(map.values());
+  }, [resources]);
 
   const resetForms = () => {
     setEditId(null);
+    setErrorMsg(null);
     setNewLoc({ name: "", city: "", address: "", floor: "" });
     setNewRes({ name: "", description: "" });
     setNewPark({ locationId: "", spotNumber: "" });
@@ -61,7 +71,7 @@ const AdminPage = () => {
       locationId: "",
       type: "WORKSPACE",
       description: "",
-      resourceIdsStr: "",
+      resourceIds: [],
     });
   };
 
@@ -83,10 +93,14 @@ const AdminPage = () => {
         const res = await axios.get("/api/locations");
         setLocations(res.data);
       } else if (activeTab === "spaces") {
-        const resLocs = await axios.get("/api/locations");
+        const [resLocs, resSpaces, resResources] = await Promise.all([
+          axios.get("/api/locations"),
+          axios.get("/api/admin/spaces-report"),
+          axios.get("/api/admin/resources-report"),
+        ]);
         setLocations(resLocs.data);
-        const resSpaces = await axios.get("/api/admin/spaces-report");
         setSpaces(resSpaces.data);
+        setResources(resResources.data);
       } else if (activeTab === "resources") {
         const res = await axios.get("/api/admin/resources-report");
         setResources(res.data);
@@ -112,7 +126,7 @@ const AdminPage = () => {
   }, [fetchData, refreshTrigger]);
 
   const handleDelete = async (endpoint, id) => {
-    if (!window.confirm("Are you sure you want to delete this item?")) return;
+    if (!window.confirm("Are you sure?")) return;
     try {
       await axios.delete(`${endpoint}/${id}`);
       setRefreshTrigger((prev) => prev + 1);
@@ -131,13 +145,11 @@ const AdminPage = () => {
     });
     window.scrollTo(0, 0);
   };
-
   const handleEditResource = (res) => {
     setEditId(res.id);
     setNewRes({ name: res.name, description: "" });
     window.scrollTo(0, 0);
   };
-
   const handleEditParking = (park) => {
     setEditId(park.id);
     setNewPark({ locationId: "", spotNumber: park.spotNumber });
@@ -146,56 +158,81 @@ const AdminPage = () => {
 
   const submitLocation = async (e) => {
     e.preventDefault();
-    if (editId) {
-      await axios.put(`/api/admin/locations/${editId}`, newLoc);
-    } else {
-      await axios.post("/api/admin/locations", newLoc);
+    try {
+      editId
+        ? await axios.put(`/api/admin/locations/${editId}`, newLoc)
+        : await axios.post("/api/admin/locations", newLoc);
+      setRefreshTrigger((prev) => prev + 1);
+      resetForms();
+    } catch (e) {
+      setErrorMsg("Error saving location.");
     }
-    setRefreshTrigger((prev) => prev + 1);
-    resetForms();
   };
 
   const submitResource = async (e) => {
     e.preventDefault();
-    if (editId) {
-      await axios.put(`/api/admin/resources/${editId}`, newRes);
-    } else {
-      await axios.post("/api/admin/resources", newRes);
+    try {
+      editId
+        ? await axios.put(`/api/admin/resources/${editId}`, newRes)
+        : await axios.post("/api/admin/resources", newRes);
+      setRefreshTrigger((prev) => prev + 1);
+      resetForms();
+    } catch (e) {
+      setErrorMsg("Error saving resource.");
     }
-    setRefreshTrigger((prev) => prev + 1);
-    resetForms();
   };
 
   const submitParking = async (e) => {
     e.preventDefault();
-    if (editId) {
-      await axios.put(`/api/admin/parkings/${editId}`, newPark);
-    } else {
-      await axios.post("/api/admin/parkings", newPark);
+    try {
+      editId
+        ? await axios.put(`/api/admin/parkings/${editId}`, newPark)
+        : await axios.post("/api/admin/parkings", newPark);
+      setRefreshTrigger((prev) => prev + 1);
+      resetForms();
+    } catch (e) {
+      setErrorMsg("Error saving parking.");
     }
-    setRefreshTrigger((prev) => prev + 1);
-    resetForms();
   };
 
   const submitSpace = async (e) => {
     e.preventDefault();
-    const resIds = newSpace.resourceIdsStr
-      ? newSpace.resourceIdsStr.split(",").map((s) => parseInt(s.trim()))
-      : [];
-    const payload = { ...newSpace, resourceIds: resIds };
+    setErrorMsg(null);
+    const payload = { ...newSpace };
 
-    if (editId) {
-      await axios.put(`/api/admin/spaces/${editId}`, payload);
-    } else {
-      await axios.post("/api/admin/spaces", payload);
+    try {
+      if (editId) {
+        await axios.put(`/api/admin/spaces/${editId}`, payload);
+      } else {
+        await axios.post("/api/admin/spaces", payload);
+      }
+      setRefreshTrigger((prev) => prev + 1);
+      resetForms();
+    } catch (err) {
+      if (err.response && err.response.data && err.response.data.message) {
+        setErrorMsg(err.response.data.message);
+      } else {
+        setErrorMsg("Error saving space. Check inputs.");
+      }
     }
-    setRefreshTrigger((prev) => prev + 1);
-    resetForms();
+  };
+
+  const toggleResource = (id) => {
+    const current = newSpace.resourceIds || [];
+    if (current.includes(id)) {
+      setNewSpace({
+        ...newSpace,
+        resourceIds: current.filter((x) => x !== id),
+      });
+    } else {
+      setNewSpace({ ...newSpace, resourceIds: [...current, id] });
+    }
   };
 
   return (
     <div className="admin-container">
       <h2>Admin Panel 🛠️</h2>
+      {errorMsg && <div className="form-error">{errorMsg}</div>}
 
       <div className="admin-tabs">
         {[
@@ -338,7 +375,7 @@ const AdminPage = () => {
                 <div className="input-group">
                   <input
                     className="form-input"
-                    placeholder="Floor info"
+                    placeholder="Floor"
                     value={newLoc.floor}
                     onChange={(e) =>
                       setNewLoc({ ...newLoc, floor: e.target.value })
@@ -348,7 +385,7 @@ const AdminPage = () => {
               </div>
               <div style={{ marginTop: "10px" }}>
                 <button className="form-button">
-                  {editId ? "Update Location" : "Save Location"}
+                  {editId ? "Update" : "Save"}
                 </button>
                 <CancelButton editId={editId} onCancel={resetForms} />
               </div>
@@ -440,18 +477,60 @@ const AdminPage = () => {
                     <option value="MEETING_ROOM">MEETING ROOM</option>
                   </select>
                 </div>
-                <div className="input-group">
-                  <input
-                    className="form-input"
-                    placeholder="Resource IDs (ex: 1, 2)"
-                    value={newSpace.resourceIdsStr}
-                    onChange={(e) =>
-                      setNewSpace({
-                        ...newSpace,
-                        resourceIdsStr: e.target.value,
-                      })
-                    }
-                  />
+              </div>
+
+              <div
+                className="resource-section"
+                style={{ marginTop: "15px", textAlign: "left" }}
+              >
+                <label
+                  style={{
+                    fontWeight: "bold",
+                    color: "#5a4b3d",
+                    display: "block",
+                    marginBottom: "5px",
+                  }}
+                >
+                  Available Resources:
+                </label>
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "10px",
+                    background: "#fcf6e8",
+                    padding: "10px",
+                    borderRadius: "8px",
+                    border: "2px solid #7a6e5a",
+                  }}
+                >
+                  {uniqueResources.length === 0 && (
+                    <span style={{ color: "#888" }}>
+                      No resources created yet.
+                    </span>
+                  )}
+                  {uniqueResources.map((res) => (
+                    <label
+                      key={res.id}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                        cursor: "pointer",
+                        background: "white",
+                        padding: "5px 10px",
+                        borderRadius: "5px",
+                        border: "1px solid #ddd",
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={newSpace.resourceIds.includes(res.id)}
+                        onChange={() => toggleResource(res.id)}
+                      />
+                      {res.name}
+                    </label>
+                  ))}
                 </div>
               </div>
 
@@ -505,7 +584,7 @@ const AdminPage = () => {
                           type: s.type,
                           locationId: "",
                           description: "",
-                          resourceIdsStr: "",
+                          resourceIds: [],
                         });
                         window.scrollTo(0, 0);
                       }}
@@ -556,7 +635,7 @@ const AdminPage = () => {
               </div>
               <div style={{ marginTop: "10px" }}>
                 <button className="form-button">
-                  {editId ? "Update Resource" : "Save Resource"}
+                  {editId ? "Update" : "Save"}
                 </button>
                 <CancelButton editId={editId} onCancel={resetForms} />
               </div>
@@ -627,7 +706,7 @@ const AdminPage = () => {
                   <input
                     type="number"
                     className="form-input"
-                    placeholder="Spot Number"
+                    placeholder="Spot #"
                     value={newPark.spotNumber}
                     onChange={(e) =>
                       setNewPark({ ...newPark, spotNumber: e.target.value })
@@ -638,7 +717,7 @@ const AdminPage = () => {
               </div>
               <div style={{ marginTop: "10px" }}>
                 <button className="form-button">
-                  {editId ? "Update Spot" : "Save Spot"}
+                  {editId ? "Update" : "Save"}
                 </button>
                 <CancelButton editId={editId} onCancel={resetForms} />
               </div>

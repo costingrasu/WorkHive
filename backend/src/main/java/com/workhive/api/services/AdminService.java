@@ -122,7 +122,12 @@ public class AdminService {
                 .orElseThrow(() -> new RuntimeException("Location not found"));
 
         List<Integer> ids = dto.getResourceIds() != null ? dto.getResourceIds() : List.of();
+
         List<Resource> selectedResources = resourceRepository.findAllById(ids);
+
+        if (selectedResources.size() != ids.size()) {
+            throw new IllegalArgumentException("One or more Resource IDs are invalid.");
+        }
 
         Space space = Space.builder()
                 .name(dto.getName())

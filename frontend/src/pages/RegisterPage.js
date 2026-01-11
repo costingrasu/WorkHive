@@ -14,16 +14,14 @@ const RegisterPage = () => {
     lastName: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -31,25 +29,25 @@ const RegisterPage = () => {
     setError(null);
     setSuccess(null);
 
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match!");
+      return;
+    }
+
     try {
       const response = await axios.post("/api/auth/register", formData);
-
-      console.log(response.data);
 
       if (response.data.token) {
         login(response.data.token);
         setSuccess("Account created! Redirecting to Dashboard...");
-
-        setTimeout(() => {
-          navigate("/");
-        }, 1500);
+        setTimeout(() => navigate("/"), 1500);
       }
     } catch (err) {
       console.log(err);
-      if (err.response && err.response.data) {
-        setError("Error. The email may be already in use.");
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
       } else {
-        setError("Temporary offline service.");
+        setError("Registration failed. Please try again.");
       }
     }
   };
@@ -104,6 +102,17 @@ const RegisterPage = () => {
           placeholder="Password"
           className="form-input"
           value={formData.password}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div className="input-wrapper">
+        <input
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          className="form-input"
+          value={formData.confirmPassword}
           onChange={handleChange}
           required
         />
