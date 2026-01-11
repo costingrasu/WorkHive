@@ -1,7 +1,7 @@
 package com.workhive.api.controllers;
 
 import com.workhive.api.dto.spaces.SpaceResponse;
-import com.workhive.api.entities.SpaceType; // Importăm Enum-ul corect
+import com.workhive.api.entities.SpaceType;
 import com.workhive.api.services.SpaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
