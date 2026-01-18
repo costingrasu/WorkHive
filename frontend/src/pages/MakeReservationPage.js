@@ -4,6 +4,8 @@ import { useNavigate, useBlocker } from "react-router-dom";
 import { createPortal } from "react-dom";
 import { formatDate } from "../utils/dateUtils";
 import "../styles/Forms.css";
+import micIcon from "../styles/assets/mic.png";
+import waveIcon from "../styles/assets/listening.png";
 
 const MakeReservationPage = () => {
   const navigate = useNavigate();
@@ -25,13 +27,15 @@ const MakeReservationPage = () => {
   const [error, setError] = useState("");
   const isSubmitting = useRef(false);
 
+  const [isListening, setIsListening] = useState(false);
+
   const isDirty = locationId !== "" || start !== "" || end !== "" || step > 1;
 
   const blocker = useBlocker(
     ({ currentLocation, nextLocation }) =>
       isDirty &&
       !isSubmitting.current &&
-      currentLocation.pathname !== nextLocation.pathname
+      currentLocation.pathname !== nextLocation.pathname,
   );
 
   const resetFormState = () => {
@@ -66,7 +70,7 @@ const MakeReservationPage = () => {
       setAvailableSpaces(response.data);
       if (response.data.length === 0) {
         setError(
-          "No spaces available for this time slot. Try different hours."
+          "No spaces available for this time slot. Try different hours.",
         );
       } else {
         setStep(2);
@@ -117,6 +121,79 @@ const MakeReservationPage = () => {
     return loc ? loc.name : "Unknown Location";
   };
 
+  const startVoiceAssistant = () => {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert(
+        "The browser does not support voice commands. Try Chrome or Safari.",
+      );
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.start();
+    setIsListening(true);
+    setError("");
+
+    recognition.onresult = async (event) => {
+      const transcript = event.results[0][0].transcript;
+      console.log("User said:", transcript);
+
+      setIsListening(false);
+      setLoading(true);
+
+      try {
+        const response = await axios.post("/api/ai/extract", {
+          text: transcript,
+        });
+        const data = response.data;
+
+        console.log("AI data:", data);
+
+        if (data.locationName) {
+          const matchedLoc = locations.find((l) =>
+            l.name.toLowerCase().includes(data.locationName.toLowerCase()),
+          );
+          if (matchedLoc) {
+            setLocationId(matchedLoc.id);
+          }
+        }
+
+        if (data.spaceType) {
+          setSpaceType(data.spaceType);
+        }
+
+        if (data.startTime) setStart(data.startTime);
+        if (data.endTime) setEnd(data.endTime);
+      } catch (err) {
+        console.error("AI error:", err);
+        setError("AI Voice Command failed. Please try manual input.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech API error:", event.error);
+      setIsListening(false);
+      if (event.error === "not-allowed") {
+        alert("Please allow microphone.");
+      } else {
+        setError("Could not hear you. Try again.");
+      }
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+  };
+
   return (
     <div className="form-container reservation-wizard">
       {blocker.state === "blocked"
@@ -144,7 +221,7 @@ const MakeReservationPage = () => {
                 </div>
               </div>
             </div>,
-            document.body
+            document.body,
           )
         : null}
 
@@ -227,9 +304,32 @@ const MakeReservationPage = () => {
             </div>
           </div>
 
-          <button type="submit" className="form-button" disabled={loading}>
-            {loading ? "Searching..." : "Find Spaces"}
-          </button>
+          <div className="search-actions-container">
+            <button
+              type="submit"
+              className="form-button main-search-btn"
+              disabled={loading}
+            >
+              {loading ? "Searching..." : "Find Spaces"}
+            </button>
+
+            <button
+              type="button"
+              onClick={startVoiceAssistant}
+              className={`ai-square-btn ${isListening ? "listening" : ""}`}
+            >
+              <img
+                src={micIcon}
+                className={`ai-icon mic ${isListening ? "hidden" : "visible"}`}
+                alt="Mic"
+              />
+              <img
+                src={waveIcon}
+                className={`ai-icon wave ${isListening ? "visible" : "hidden"}`}
+                alt="Listening"
+              />
+            </button>
+          </div>
         </form>
       )}
 
