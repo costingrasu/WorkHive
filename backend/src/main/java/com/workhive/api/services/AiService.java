@@ -17,7 +17,7 @@ public class AiService {
 
     private static final String BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=";
 
-    private static final String API_KEY = "AIzaSyCYCZu28Hyw8UT33gzoxbKOsmOatT2bKkU";
+    private static final String API_KEY = "API KEY";
 
     private final ObjectMapper objectMapper;
 
